@@ -24,9 +24,15 @@ local ok, err = red:connect(ip, port)
 if not ok then  
     ngx.say("connect to redis error : ", err)  
     return close_redis(red)  
-end  
-local args = ngx.req.get_uri_args()
-local args = ngx.req.get_post_args()
+end
+local request_method = ngx.var.request_method
+local args = nil
+if "GET" == request_method then
+    args = ngx.req.get_uri_args()
+elseif "POST" == request_method then
+    ngx.req.read_body()
+    args = ngx.req.get_post_args()
+end
 local key = args["key"]
 local resp, err = red:get(key)  
 if not resp then  
