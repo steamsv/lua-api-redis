@@ -25,7 +25,7 @@ if not ok then
     ngx.say("connect to redis error : ", err)  
     return close_redis(red)  
 end  
-local args = ngx.req.get_uri_args()
+local args = ngx.req.get_post_args()
 local key = args["key"]
 ok, err = red:del(key)  
 if not ok then  
